@@ -49,7 +49,9 @@ body {
 }
 
 .user .message-content {
-  direction: rtl;
+
+  
+  flex-direction: row;
   background-color: #2BB673;
   color: white;
   border-radius: 15px;
@@ -57,7 +59,7 @@ body {
 }
 
 .bot .message-content {
-  direction: ltr;
+  flex-direction: row-reverse;
   background-color: #F4F5F44D;
   color: white;
   border-radius: 15px;

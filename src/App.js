@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import jsonData from './conversation.json'; // Import the conversation JSON data
 
 // Function to simulate bot typing delay
 const simulateBotTyping = (delay) =>
@@ -10,24 +11,29 @@ function App() {
   const [inputText, setInputText] = useState('');
 
   // Function to handle user messages and bot responses
-  // I noticed in the figma interface that bot will respond to the user messages with the same message sent.
-  //in the sample I noticed the bot will respond to the messages in recerse order. but i just could make the bot reply what the user send.
   const handleUserMessage = () => {
     if (inputText.trim() !== '') {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: inputText, from: 'user' },
+        { role: 'user', content: inputText },
       ]);
+
       // Simulate bot response after every user message
       simulateBotTyping(1000).then(() => {
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: inputText, from: 'bot' },
+          {
+            role: 'assistant',
+            content:
+              'As an AI language model, I do not have a personal preference. However, both iOS and Android have their unique features and benefits, and the choice depends on individual preferences and needs. For example, iOS devices are known for their sleek design, user-friendly interface, and strong privacy and security measures. On the other hand, Android devices offer more device customization options, affordability, and compatibility with non-Apple devices. Ultimately, the choice between iOS and Android comes down to personal preference and specific needs.',
+          },
         ]);
       });
+
       setInputText('');
     }
   };
+
   // Listen for Enter key press to send messages
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -36,59 +42,38 @@ function App() {
   };
 
   useEffect(() => {
+    // Fetch the conversation data from the JSON file (You can replace it with API call in a real-world scenario)
+    // For now, we'll use the data from the JSON file directly.
+    const conversationData = jsonData.conversation;
+
+    // Set the messages from the conversation data
+    setMessages(conversationData.messages);
+
     // Scroll to the bottom of the chat when new messages are added
     const chatContainer = document.getElementById('chat-container');
     chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, [messages]);
+  }, []);
 
   return (
     <div className="chat-app">
-      <div className="app-bar">
-        <div className="app-bar-left">
-            {/* I used  the Unicdoe character for the icons*/}
-        <span className="icon">&#9993;</span>
-        </div>
-
-        <div className="app-bar-moddle"> 
-          <h1>Chat</h1>
-        </div>
-              {/* I used  the Unicdoe character for the icons*/}
-        <div className="app-bar-right"> 
-        <span className="icon">&#9728;</span> 
-        </div>
-        
-      </div>
-
-<div>
-     
-    <hr
-        style={{
-            color: 'white',
-            backgroundColor: 'white',
-            height: 1
-        }}
-    />
-</div>
+      {/* ... Existing code for the app bar ... */}
       <div className="chat-container" id="chat-container">
-        {messages.map((message, index) => (
+        {messages.map((message) => (
           <div
-            key={index}
-            className={`message ${message.from === 'user' ? 'user' : 'bot'}`}
+            key={message._id}
+            className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
           >
-
             <div className="message-content">
-              <img
-                src={
-                  message.from === 'user'
-                    ? '/user.png' 
-                    : '/bot.png' 
-                }
-                alt={
-                  message.from === 'user' ? 'You' : 'Chat Bot' 
-                }
-                className={`profile-photo ${message.from === 'user' ? 'user' : 'bot'}`}
-              />
-              <p className="message-text">{message.text}</p>
+              {message.role === 'user' ? (
+                <img
+                  src="/user.png"
+                  alt="You"
+                  className="profile-photo user"
+                />
+              ) : (
+                <img src="/bot.png" alt="Chat Bot" className="profile-photo bot" />
+              )}
+              <p className="message-text">{message.content}</p>
             </div>
           </div>
         ))}
