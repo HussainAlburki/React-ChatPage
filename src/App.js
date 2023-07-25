@@ -42,11 +42,10 @@ function App() {
   };
 
   useEffect(() => {
-    // Fetch the conversation data from the JSON file (You can replace it with API call in a real-world scenario)
-    // For now, we'll use the data from the JSON file directly.
+    
     const conversationData = jsonData.conversation;
 
-    // Set the messages from the conversation data
+   
     setMessages(conversationData.messages);
 
     // Scroll to the bottom of the chat when new messages are added
