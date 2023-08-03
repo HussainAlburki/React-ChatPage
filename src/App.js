@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import jsonData from './conversation.json'; // Import the conversation JSON data
+import jsonData from './conversation.json';
 
-// Function to simulate bot typing delay
 const simulateBotTyping = (delay) =>
   new Promise((resolve) => setTimeout(resolve, delay));
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [isBotTyping, setIsBotTyping] = useState(false); // New state for bot typing indicator
 
-  // Function to handle user messages and bot responses
   const handleUserMessage = () => {
     if (inputText.trim() !== '') {
       setMessages((prevMessages) => [
@@ -18,23 +17,32 @@ function App() {
         { role: 'user', content: inputText },
       ]);
 
-      // Simulate bot response after every user message
-      simulateBotTyping(1000).then(() => {
+      setIsBotTyping(true); // Set bot typing to true before the reply
+
+      simulateBotTyping(500).then(() => {
+        // Simulate bot typing
         setMessages((prevMessages) => [
           ...prevMessages,
-          {
-            role: 'assistant',
-            content:
-              'As an AI language model, I do not have a personal preference. However, both iOS and Android have their unique features and benefits, and the choice depends on individual preferences and needs. For example, iOS devices are known for their sleek design, user-friendly interface, and strong privacy and security measures. On the other hand, Android devices offer more device customization options, affordability, and compatibility with non-Apple devices. Ultimately, the choice between iOS and Android comes down to personal preference and specific needs.',
-          },
+          { role: 'bot', content: 'Typing...' },
         ]);
+        simulateBotTyping(1000).then(() => {
+          // Simulate bot reply
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              role: 'assistant',
+              content:
+                'As an AI language model, I do not have a personal preference. However, both iOS and Android have their unique features and benefits, and the choice depends on individual preferences and needs. For example, iOS devices are known for their sleek design, user-friendly interface, and strong privacy and security measures. On the other hand, Android devices offer more device customization options, affordability, and compatibility with non-Apple devices. Ultimately, the choice between iOS and Android comes down to personal preference and specific needs.',
+            },
+          ]);
+          setIsBotTyping(false); // Set bot typing to false after the reply
+        });
       });
 
       setInputText('');
     }
   };
 
-  // Listen for Enter key press to send messages
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleUserMessage();
@@ -42,37 +50,75 @@ function App() {
   };
 
   useEffect(() => {
-    
     const conversationData = jsonData.conversation;
-
-   
     setMessages(conversationData.messages);
 
-    // Scroll to the bottom of the chat when new messages are added
     const chatContainer = document.getElementById('chat-container');
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }, []);
 
   return (
     <div className="chat-app">
-      {/* ... Existing code for the app bar ... */}
+      <div className="app-bar">
+        <div className="app-bar-left">
+          <span className="icon">&#9993;</span>
+        </div>
+
+        <div className="app-bar-moddle">
+          <h1>Chat</h1>
+        </div>
+
+        <div className="app-bar-right">
+          <span className="icon">&#9728;</span>
+        </div>
+      </div>
+
+      <div>
+        <hr
+          style={{
+            color: 'white',
+            backgroundColor: 'white',
+            height: 1,
+          }}
+        />
+      </div>
+
       <div className="chat-container" id="chat-container">
         {messages.map((message) => (
           <div
             key={message._id}
-            className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
+            className={`message ${
+              message.role === 'user' ? 'user' : 'bot'
+            }`}
+            style={{
+              justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
+              textAlign: message.role === 'user' ? 'right' : 'left',
+            }}
           >
-            <div className="message-content">
-              {message.role === 'user' ? (
+            {message.role === 'user' ? (
+              <div className="profile-photo">
                 <img
                   src="/user.png"
                   alt="You"
                   className="profile-photo user"
                 />
-              ) : (
+              </div>
+            ) : (
+              <div className="profile-photo">
                 <img src="/bot.png" alt="Chat Bot" className="profile-photo bot" />
-              )}
-              <p className="message-text">{message.content}</p>
+              </div>
+            )}
+            <div className="message-content">
+              {message.content === 'Typing...' && isBotTyping ? ( // Show typing indicator when bot is typing
+                <div className="typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              ) : null} {/* Do not show anything in the message-content when the bot is typing */}
+              {message.content !== 'Typing...' && !isBotTyping ? ( // Show the message content when the bot is not typing
+                <p className="message-text">{message.content}</p>
+              ) : null}
             </div>
           </div>
         ))}

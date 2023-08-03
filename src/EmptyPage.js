@@ -1,18 +1,12 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
-const EmptyPage = () => {
-  const history = useHistory(); // Initialize useHistory
-
+function EmptyPage() {
   return (
     <div>
-      <h1>Empty Page</h1>
-      {/* Replace with your icon component or icon image */}
-      <span className="icon" onClick={() => history.goBack()}>
-        &#9664; Go Back
-      </span>
+      <h1>This is an empty page</h1>
+      <p>You can add your content here.</p>
     </div>
   );
-};
+}
 
 export default EmptyPage;
