@@ -96,15 +96,16 @@ function App() {
             }}
           >
             {message.role === 'user' ? (
-              <div className="profile-photo">
+              <div className="profile-photoU">
                 <img
                   src="/user.png"
                   alt="You"
                   className="profile-photo user"
                 />
+                
               </div>
             ) : (
-              <div className="profile-photo">
+              <div className="profile-photB">
                 <img src="/bot.png" alt="Chat Bot" className="profile-photo bot" />
               </div>
             )}
