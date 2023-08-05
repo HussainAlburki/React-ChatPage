@@ -160,3 +160,11 @@ button {
     opacity: 1;
   }
 }
+
+
+.back-link {
+  font-size: 60px; 
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+}

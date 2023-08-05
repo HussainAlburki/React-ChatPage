@@ -61,7 +61,7 @@ function App() {
     <div className="chat-app">
       <div className="app-bar">
         <div className="app-bar-left">
-          <span className="icon">&#9993;</span>
+        <a href ="/empty"><span className="icon">&#9993;</span></a>
         </div>
 
         <div className="app-bar-moddle">
@@ -69,7 +69,7 @@ function App() {
         </div>
 
         <div className="app-bar-right">
-          <span className="icon">&#9728;</span>
+        <a href ="/empty"><span className="icon">&#9728;</span></a>
         </div>
       </div>
 

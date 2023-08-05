@@ -1,10 +1,16 @@
 import React from 'react';
+import './App.css';
 
 function EmptyPage() {
   return (
     <div>
-      <h1>This is an empty page</h1>
-      <p>You can add your content here.</p>
+        <h>
+            <a href="/" className="back-link">
+              &#8592;
+            </a>
+          </h>
+   
+      
     </div>
   );
 }
